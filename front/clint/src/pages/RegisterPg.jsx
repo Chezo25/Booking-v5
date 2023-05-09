@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
-const Register = () => {
+const RegisterPg = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -20,9 +21,24 @@ const Register = () => {
     if (password !== confirmPassword) {
       console.log("Passwords do not match");
     } else {
-      console.log("Registration success");
+      try {
+        const config = {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        };
+
+        const body = JSON.stringify({ name, email, password });
+
+        const res = await axios.post("http://localhost:4000/test", body, config);
+
+        console.log(res.data);
+      } catch (err) {
+        console.error(err.response.data);
+      }
     }
   };
+
 
   return (
     <div className="flex justify-center items-center h-screen">
@@ -30,7 +46,7 @@ const Register = () => {
         <h2 className="text-center text-2xl font-medium mb-4">Register</h2>
         <div className="mb-4">
           <label htmlFor="name" className="block text-gray-700 font-medium mb-2">
-            Name
+            Full Name
           </label>
           <input
             type="text"
@@ -106,4 +122,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default RegisterPg;
