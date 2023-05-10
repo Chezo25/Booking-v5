@@ -30,7 +30,7 @@ const RegisterPg = () => {
 
         const body = JSON.stringify({ name, email, password });
 
-        const res = await axios.post("http://localhost:4000/test", body, config);
+        const res = await axios.post("/register", body, config);
 
         console.log(res.data);
       } catch (err) {
