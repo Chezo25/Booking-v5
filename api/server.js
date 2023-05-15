@@ -53,7 +53,7 @@ app.post("/register", async (req, res) => {
     // Handle any errors that occur
     console.error(error);
     return res
-      .status(500)
+      .status(422)
       .json({ message: "An error occurred while creating the user" });
   }
 });

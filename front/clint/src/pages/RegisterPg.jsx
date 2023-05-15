@@ -35,6 +35,7 @@ const RegisterPg = () => {
         console.log(res.data);
       } catch (err) {
         console.error(err.response.data);
+        alert('Registration failed. Please try again')
       }
     }
   };
