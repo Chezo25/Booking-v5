@@ -13,10 +13,20 @@ function LoginPg() {
     setPassword(event.target.value);
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    // Handle login logic here
-  };
+  const handleSubmit = async (event) => {
+  event.preventDefault();
+
+  try {
+     await axios.post('/login', { email, password });
+    // Handle successful login logic here
+    alert('Login successful');
+  } catch (error) {
+    alert('Login failed');
+    // Handle error
+    console.error(error);
+  }
+};
+
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-blue-100">

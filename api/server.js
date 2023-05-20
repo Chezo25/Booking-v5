@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const { default: mongoose } = require("mongoose");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const Users = require("./models/User.jsx");
 require("dotenv").config();
 const app = express();
@@ -55,6 +56,47 @@ app.post("/register", async (req, res) => {
     return res
       .status(422)
       .json({ message: "An error occurred while creating the user" });
+  }
+});
+
+app.post("/login", async (req, res) => {
+  // Get data from request body
+  const { email, password } = req.body;
+
+  // Do some validation
+  if (!email || !password) {
+    return res.status(400).json({ message: "Missing required fields" });
+  }
+
+  try {
+    // Check if the user exists in the database
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
+
+    // Compare the provided password with the stored password
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if (!isMatch) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
+
+    // Generate a JWT token
+    const token = jwt.sign(
+      { email: user.email, id: user._id },
+      "your-secret-key",
+      { expiresIn: "2h" }
+    );
+
+    // Return the token and a success message
+    return res.status(200).json({ message: "Login successful", token });
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(500)
+      .json({ message: "An error occurred while logging in" });
   }
 });
 
